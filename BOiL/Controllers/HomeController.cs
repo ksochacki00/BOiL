@@ -1,4 +1,8 @@
-﻿using System;
+﻿using BOiL.Models;
+using Kendo.Mvc.Extensions;
+using Kendo.Mvc.UI;
+using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,6 +29,20 @@ namespace BOiL.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult ReadNothing([DataSourceRequest] DataSourceRequest request)
+        {
+            return Json(new List<MainGridViewModel>().ToDataSourceResult(request));
+        }
+
+        public ActionResult ProcessMainGrid([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<MainGridViewModel> vms)
+        {
+            //Tutaj dostajecie modele z grida i dalej cos z nimi robicie
+
+            //a potem ja bede to wyswietlal w jakims popupie czy cos
+
+            return Json(vms.ToDataSourceResult(request));
         }
     }
 }

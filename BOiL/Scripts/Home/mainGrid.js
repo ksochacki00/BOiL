@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var currentValue = 0;
+
+$(document).ready(function () {
     console.log("ready!");
 
     document.getElementById("addButton").addEventListener("click", function () {
@@ -22,4 +24,10 @@ function processMainGrid() {
 
 function error_handler(e) {
     console.log(e);
+}
+
+function onGridEdit(e) {
+    if (e.model.isNew()) {
+        e.model.set("Id", ++currentValue);
+    }
 }

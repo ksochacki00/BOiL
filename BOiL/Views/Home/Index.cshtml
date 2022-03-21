@@ -25,19 +25,21 @@
                 columns.Bound(p => p.Id);
                 columns.Bound(p => p.Name);
                 columns.Bound(p => p.Duration);
-                columns.Bound(p => p.StartDate).Format("{0:MM/dd/yyyy}");
-                columns.Bound(p => p.EndDate).Format("{0:MM/dd/yyyy}");
+                columns.Bound(p => p.StartDate).Format("{0:MM/dd/yyyy}").Hidden(true);
+                columns.Bound(p => p.EndDate).Format("{0:MM/dd/yyyy}").Hidden(true);
                 columns.Bound(p => p.Predecessors);
 
             })
             .Editable(e=>e.Mode(GridEditMode.InCell))
+            .Events(e =>e.Edit("onGridEdit"))
             .Scrollable()
             .HtmlAttributes(new { style = "height:550px;" })
             .DataSource(dataSource => dataSource
                 .Ajax()
                 .Batch(true)
                 .Events(events => events.Error("error_handler"))
-                .Model(model => model.Id(p => p.Id))
+                .Model(model => { model.Id(p => p.Id);
+                })
                 .Read(update => update.Action("ReadNothing", "Home"))
                 .Create(update => update.Action("ProcessMainGrid", "Home"))
             )

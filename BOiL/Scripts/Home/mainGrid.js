@@ -20,6 +20,14 @@ function addRowToGrid() {
 function processMainGrid() {
     var grid = $("#mainGrid").data("kendoGrid");
     grid.saveChanges();
+
+    setTimeout(function () {
+        document.getElementById("mainGridDiv").style.visibility = "hidden";
+        document.getElementById("mainGridDiv").style.height = "0px";
+        document.getElementById("mainGrid").style.height = "0px";
+        document.getElementById("cpmGridDiv").style.visibility = "";
+        $("#cpmGrid").data("kendoGrid").dataSource.read();
+    }, 500);
 }
 
 function error_handler(e) {
@@ -27,7 +35,7 @@ function error_handler(e) {
 }
 
 function onGridEdit(e) {
-    if (e.model.isNew()) {
+    if (e.model.Id == 0) {
         e.model.set("Id", ++currentValue);
     }
 }

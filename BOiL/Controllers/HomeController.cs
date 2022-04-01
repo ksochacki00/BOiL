@@ -12,6 +12,7 @@ namespace BOiL.Controllers
 {
     public class HomeController : Controller
     {
+        private static string _data = "CalculatedData";
         public ActionResult Index()
         {
             return View();
@@ -42,9 +43,32 @@ namespace BOiL.Controllers
 
             //a potem ja bede to wyswietlal w jakims popupie czy cos
             TranslateStringToListInt(vms.ToList());
+            vms = vms.OrderBy(x => x.Id).ToList();
             vms = Forward(vms.ToList());
-
+            FindSuccessors(vms.ToList());
+            vms = Backward(vms.ToList());
+            CriticalPath(vms.ToList());
+            Session[_data] = vms;
             return Json(vms.ToDataSourceResult(request));
+        }
+
+        public JsonResult GetCPMGrid([DataSourceRequest] DataSourceRequest request)
+        {
+            var data = Session[_data] as List<MainGridViewModel>;
+            return Json(data.ToDataSourceResult(request));
+        }
+
+        void CriticalPath(List<MainGridViewModel> vms)
+        {
+            System.Diagnostics.Debug.WriteLine("\n          Critical Path: ");
+
+            foreach (MainGridViewModel activity in vms)
+            {
+                if ((activity.Eet - activity.Let == 0) && (activity.Est - activity.Lst == 0))
+                    System.Diagnostics.Debug.WriteLine("{0} ", activity.Id);
+            }
+
+            System.Diagnostics.Debug.WriteLine("\n\n         Total duration: {0}\n\n", vms[vms.Count() - 1].Eet);
         }
 
         private void TranslateStringToListInt(List<MainGridViewModel> vms)
@@ -96,7 +120,10 @@ namespace BOiL.Controllers
                     {
                         var item = list.First(x => x.Id == intPred);
                         if (list[i].Est < item.Eet)
+                        {
                             list[i].Est = item.Eet;
+                        }
+                            
                     }
                 }
 
@@ -105,8 +132,7 @@ namespace BOiL.Controllers
 
             return list;
         }
-        /*
-        private static List<MainGridViewModel> WalkListAback(List<MainGridViewModel> list)
+        private static List<MainGridViewModel> Backward(List<MainGridViewModel> list)
         {
             int na = list.Count();
             list[na - 1].Let = list[na - 1].Eet;
@@ -114,13 +140,20 @@ namespace BOiL.Controllers
 
             for (int i = na - 2; i >= 0; i--)
             {
-                foreach (Activity activity in list[i].Successors)
+                foreach (int intSucc in list[i].SucessorsList)
                 {
-                    if (list[i].Let == 0)
-                        list[i].Let = activity.Lst;
-                    else
-                      if (list[i].Let > activity.Lst)
-                        list[i].Let = activity.Lst;
+                    if(intSucc != -1)
+                    {
+                        var item = list.First(x => x.Id == intSucc);
+                        if (list[i].Let == 0)
+                        {
+                            list[i].Let = item.Lst;
+                        }
+                        else if (list[i].Let > item.Lst)
+                        {
+                            list[i].Let = item.Lst;
+                        }
+                    }
                 }
 
                 list[i].Lst = list[i].Let - list[i].Duration;
@@ -128,6 +161,5 @@ namespace BOiL.Controllers
 
             return list;
         }
-        */
     }
 }

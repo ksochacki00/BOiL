@@ -7,7 +7,7 @@
 @using BOiL.Models
 @{ ViewBag.Title = "BOiL Grid"; }
 
-<div class="row" style="margin-top: 40px">
+<div class="row" style="margin-top: 40px; height: 50px">
     <div class="col-md-1">
         <input type="button" id="addButton" value="Add" />
     </div>
@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<div class="row" style="margin-top: 10px">
+<div class="row" id = "mainGridDiv" style="margin-top: 10px;">
     <div class="col-md-12">
         @(Html.Kendo().Grid<MainGridViewModel>()
             .Name("mainGrid")
@@ -31,7 +31,7 @@
 
             })
             .Editable(e=>e.Mode(GridEditMode.InCell))
-            .Events(e =>e.Edit("onGridEdit"))
+            .Events(e =>e.BeforeEdit("onGridEdit"))
             .Scrollable()
             .HtmlAttributes(new { style = "height:550px;" })
             .DataSource(dataSource => dataSource
@@ -42,6 +42,36 @@
                 })
                 .Read(update => update.Action("ReadNothing", "Home"))
                 .Create(update => update.Action("ProcessMainGrid", "Home"))
+            )
+        )
+    </div>
+</div>
+<div class="row" id="cpmGridDiv" style="margin-top: 10px;visibility:hidden;">
+    <div class="col-md-12">
+        @(Html.Kendo().Grid<MainGridViewModel>()
+            .Name("cpmGrid")
+            .AutoBind(false)
+            .Columns(columns =>
+            {
+                columns.Bound(p => p.Id);
+                columns.Bound(p => p.Name);
+                columns.Bound(p => p.Duration);
+                columns.Bound(p => p.Predecessors);
+                columns.Bound(p => p.Est);
+                columns.Bound(p => p.Eet);
+                columns.Bound(p => p.Lst);
+                columns.Bound(p => p.Let);
+
+            })
+            .Scrollable()
+            .HtmlAttributes(new { style = "height:550px;" })
+            .DataSource(dataSource => dataSource
+                .Ajax()
+                .Batch(true)
+                .Events(events => events.Error("error_handler"))
+                .Model(model => { model.Id(p => p.Id);
+                })
+                .Read(update => update.Action("GetCPMGrid", "Home"))
             )
         )
     </div>

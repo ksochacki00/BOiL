@@ -29,6 +29,7 @@ function processMainGrid() {
         $("#cpmGrid").data("kendoGrid").dataSource.read();
         setTimeout(function () {
             critialPath();
+            graph();
         }, 200);
     }, 500);
 }
@@ -53,7 +54,7 @@ function critialPath() {
     for (var i = 0; i < data.length; i++) {
         var item = data[i];
         if (item.OnCriticalPath) {
-            nodes.add({ id: item.Id, label: item.Id.toString() });
+            nodes.add({ id: item.Id, label: item.Id.toString(), x: idsOnCritialPathCount* 100, y:100 });
             idsOnCritialPath[idsOnCritialPathCount] = item.Id;
             idsOnCritialPathCount++;
         }
@@ -64,7 +65,7 @@ function critialPath() {
 
 
     for (var i = 1; i < idsOnCritialPathCount; i++) {
-        edges.add({ from: idsOnCritialPath[i - 1], to: idsOnCritialPath[i] });
+        edges.add({ from: idsOnCritialPath[i - 1], to: idsOnCritialPath[i], arrow: "to" });
     }
     
 
@@ -76,8 +77,68 @@ function critialPath() {
         nodes: nodes,
         edges: edges
     };
-    var options = {};
-
+    var options = {
+        edges: {
+            arrows: {
+                to: {
+                    enabled: true,
+                    type: "arrow"
+                }
+            }
+        }
+    }
     // initialize your network!
     var network = new vis.Network(container, data, options);
+
+    document.getElementById("criticalPathText").style.visibility = ""
+}
+
+function onGridEdit(e) {
+    if (e.model.Id == 0) {
+        e.model.set("Id", ++currentValue);
+    }
+}
+
+function graph() {
+    var grid = $("#cpmGrid").data("kendoGrid");
+    var data = grid.dataSource.data();
+    var nodes = new vis.DataSet([]);
+
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        nodes.add({ id: item.Id, label: item.Id.toString() });
+    }
+
+    var edges = new vis.DataSet([
+    ]);
+
+    for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        for (var j = 0; j < item.SucessorsList.length; j++) {
+            edges.add({ from: item.Id, to: item.SucessorsList[j], arrow: "to" });
+        }
+    }
+
+    // create a network
+    var container = document.getElementById('graph');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        edges: {
+            arrows: {
+                to: {
+                    enabled: true,
+                    type: "arrow"
+                }
+            }
+        }
+    }
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
+
+    document.getElementById("graphText").style.visibility = ""
 }

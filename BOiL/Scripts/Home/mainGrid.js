@@ -1,4 +1,5 @@
 ﻿var currentValue = 0;
+var error = false;
 
 $(document).ready(function () {
     console.log("ready!");
@@ -18,24 +19,28 @@ function addRowToGrid() {
 }
 
 function processMainGrid() {
+    error = false;
     var grid = $("#mainGrid").data("kendoGrid");
     grid.saveChanges();
 
     setTimeout(function () {
-        document.getElementById("mainGridDiv").style.visibility = "hidden";
-        document.getElementById("mainGridDiv").style.height = "0px";
-        document.getElementById("mainGrid").style.height = "0px";
-        document.getElementById("cpmGridDiv").style.visibility = "";
-        $("#cpmGrid").data("kendoGrid").dataSource.read();
-        setTimeout(function () {
-            critialPath();
-            graph();
-        }, 200);
+        if (!error) {
+            document.getElementById("mainGridDiv").style.visibility = "hidden";
+            document.getElementById("mainGridDiv").style.height = "0px";
+            document.getElementById("mainGrid").style.height = "0px";
+            document.getElementById("cpmGridDiv").style.visibility = "";
+            $("#cpmGrid").data("kendoGrid").dataSource.read();
+            setTimeout(function () {
+                critialPath();
+                graph();
+            }, 200);
+        }
     }, 500);
 }
 
 function error_handler(e) {
-    console.log(e);
+    error = true;
+    alert(e.errors);
 }
 
 function onGridEdit(e) {

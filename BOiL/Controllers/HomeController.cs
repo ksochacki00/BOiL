@@ -39,10 +39,13 @@ namespace BOiL.Controllers
 
         public ActionResult ProcessMainGrid([DataSourceRequest] DataSourceRequest request, [Bind(Prefix = "models")] IEnumerable<MainGridViewModel> vms)
         {
-            //Tutaj dostajecie modele z grida i dalej cos z nimi robicie
-
-            //a potem ja bede to wyswietlal w jakims popupie czy cos
             TranslateStringToListInt(vms.ToList());
+            var id = CheckIfAllPredecesorsAreGood(vms.ToList());
+            if (id != -1)
+            {
+                var result = new DataSourceResult(){ Errors = "Wrong predecessor in row with id: " + id };
+                return Json(result);
+            }
             vms = vms.OrderBy(x => x.Id).ToList();
             vms = Forward(vms.ToList());
             FindSuccessors(vms.ToList());
@@ -163,5 +166,42 @@ namespace BOiL.Controllers
 
             return list;
         }
+
+        private int CheckIfAllPredecesorsAreGood(List<MainGridViewModel> vms)
+        {
+            List<int> ids = new List<int>();
+            foreach(var item in vms)
+            {
+                ids.Add(item.Id);
+            }
+
+            foreach(var item in vms)
+            {
+                if(item.PredecessorsList.Count() > 0)
+                {
+                    foreach (int id in item.PredecessorsList)
+                    {
+                        if (ids.Where(x => x == id).Count() == 0)
+                        {
+                            return item.Id;
+                        }
+                        if (id == item.Id)
+                        {
+                            return item.Id;
+                        }
+                    }
+                }
+                else
+                {
+                    if (item.Id != 1)
+                    {
+                        return item.Id;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
     }
 }

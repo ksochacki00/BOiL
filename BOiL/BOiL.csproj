@@ -220,6 +220,30 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
+    <Content Include="vis\img\network\acceptDeleteIcon.png" />
+    <Content Include="vis\img\network\addNodeIcon.png" />
+    <Content Include="vis\img\network\backIcon.png" />
+    <Content Include="vis\img\network\connectIcon.png" />
+    <Content Include="vis\img\network\cross.png" />
+    <Content Include="vis\img\network\cross2.png" />
+    <Content Include="vis\img\network\deleteIcon.png" />
+    <Content Include="vis\img\network\downArrow.png" />
+    <Content Include="vis\img\network\editIcon.png" />
+    <Content Include="vis\img\network\leftArrow.png" />
+    <Content Include="vis\img\network\minus.png" />
+    <Content Include="vis\img\network\plus.png" />
+    <Content Include="vis\img\network\rightArrow.png" />
+    <Content Include="vis\img\network\upArrow.png" />
+    <Content Include="vis\img\network\zoomExtends.png" />
+    <Content Include="vis\vis-graph3d.min.js" />
+    <Content Include="vis\vis-network.min.css" />
+    <Content Include="vis\vis-network.min.js" />
+    <Content Include="vis\vis-timeline-graph2d.min.css" />
+    <Content Include="vis\vis-timeline-graph2d.min.js" />
+    <Content Include="vis\vis.css" />
+    <Content Include="vis\vis.js" />
+    <Content Include="vis\vis.min.css" />
+    <Content Include="vis\vis.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -248,6 +272,8 @@
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
+    <Content Include="vis\vis.map" />
+    <Content Include="vis\vis.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

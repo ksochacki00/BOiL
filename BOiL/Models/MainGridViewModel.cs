@@ -20,5 +20,6 @@ namespace BOiL.Models
         public int Lst { get; set; } // Latest start time
         public int Eet { get; set; } // Earliest End time
         public int Let { get; set; } // Latest End time
+        public bool OnCriticalPath { get; set; } // 
     }
 }

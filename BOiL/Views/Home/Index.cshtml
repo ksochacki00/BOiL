@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<div class="row" id = "mainGridDiv" style="margin-top: 10px;">
+<div class="row" id="mainGridDiv" style="margin-top: 10px;">
     <div class="col-md-12">
         @(Html.Kendo().Grid<MainGridViewModel>()
             .Name("mainGrid")
@@ -75,6 +75,19 @@
             )
         )
     </div>
+    <div id="critialPath">
+
+    </div>
 </div>
 
 <script src="~/Scripts/Home/mainGrid.js"></script>
+
+<script type="text/javascript" src="~/vis/vis-network.min.js"></script>
+
+<style type="text/css">
+    #critialPath {
+        width: 600px;
+        height: 400px;
+        border: 1px solid lightgray;
+    }
+</style>

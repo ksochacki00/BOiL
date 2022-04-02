@@ -47,7 +47,7 @@ namespace BOiL.Controllers
             vms = Forward(vms.ToList());
             FindSuccessors(vms.ToList());
             vms = Backward(vms.ToList());
-            CriticalPath(vms.ToList());
+            SetCriticalPath(vms.ToList());
             Session[_data] = vms;
             return Json(vms.ToDataSourceResult(request));
         }
@@ -58,17 +58,19 @@ namespace BOiL.Controllers
             return Json(data.ToDataSourceResult(request));
         }
 
-        void CriticalPath(List<MainGridViewModel> vms)
+        void SetCriticalPath(List<MainGridViewModel> vms)
         {
-            System.Diagnostics.Debug.WriteLine("\n          Critical Path: ");
-
-            foreach (MainGridViewModel activity in vms)
+            foreach (MainGridViewModel vm in vms)
             {
-                if ((activity.Eet - activity.Let == 0) && (activity.Est - activity.Lst == 0))
-                    System.Diagnostics.Debug.WriteLine("{0} ", activity.Id);
+                if ((vm.Eet - vm.Let == 0) && (vm.Est - vm.Lst == 0))
+                {
+                    vm.OnCriticalPath = true;
+                }
+                else
+                {
+                    vm.OnCriticalPath = false;
+                }
             }
-
-            System.Diagnostics.Debug.WriteLine("\n\n         Total duration: {0}\n\n", vms[vms.Count() - 1].Eet);
         }
 
         private void TranslateStringToListInt(List<MainGridViewModel> vms)

@@ -181,21 +181,17 @@ namespace BOiL.Controllers
                 {
                     foreach (int id in item.PredecessorsList)
                     {
-                        if (ids.Where(x => x == id).Count() == 0)
-                        {
-                            return item.Id;
-                        }
                         if (id == item.Id)
                         {
                             return item.Id;
                         }
-                    }
-                }
-                else
-                {
-                    if (item.Id != 1)
-                    {
-                        return item.Id;
+                        if (ids.Where(x => x == id).Count() == 0)
+                        {
+                            if(item.Id != 1 && id == -1)
+                            {
+                                return item.Id;
+                            }
+                        }
                     }
                 }
             }
